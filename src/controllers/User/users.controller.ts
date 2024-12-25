@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { AppDataSouce } from "../../db";
 import { UserEntity } from "../../entities";
-import passport from "passport";
+
+const userRepository = AppDataSouce.getRepository(UserEntity);
 
 const getCurrentUser = async (req: Request, res: Response) => {
 	if (!req.user) {
@@ -12,4 +13,34 @@ const getCurrentUser = async (req: Request, res: Response) => {
 	res.json(req.user).status(httpStatus.OK);
 };
 
-export { getCurrentUser };
+const getAllUsers = async (req: Request, res: Response) => {
+	await userRepository
+		.find()
+		.then((users) => {
+			if (!users) {
+				return res
+					.json({ error: "No users found" })
+					.status(httpStatus.NOT_FOUND);
+			}
+
+			res.json(users).status(httpStatus.OK);
+		})
+		.catch((err) => console.log(err));
+};
+
+const getUserById = async (req: Request, res: Response) => {
+	await userRepository
+		.findOneBy({ uuid: req.params.id })
+		.then((user) => {
+			if (!user) {
+				return res
+					.status(httpStatus.NOT_FOUND)
+					.json({ error: "No user found" });
+			}
+
+			res.status(httpStatus.OK).json(user);
+		})
+		.catch((err) => console.log(err));
+};
+
+export { getCurrentUser, getAllUsers, getUserById };

@@ -5,4 +5,4 @@ import { Router } from "express";
 export const router = Router();
 
 router.use("/auth", authRouter);
-router.use("/user", userRouter);
+router.use("/users", userRouter);

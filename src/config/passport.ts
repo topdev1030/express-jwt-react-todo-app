@@ -21,7 +21,6 @@ const configureJwtStrategy = (passport: typeof import("passport")) => {
 			userRepository
 				.findOne({ where: { uuid: jwtPayload.id } })
 				.then((user) => {
-					console.log("user: ", user);
 					if (user) {
 						return done(null, user);
 					}
