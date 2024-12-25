@@ -1,5 +1,5 @@
-import { body } from "express-validator";
+const { body } = require("express-validator");
 
 export const createTitleValidator = () => {
-  return [body("title").exists().withMessage("Title is required.")];
+	return [body("title").exists().withMessage("Title is required.")];
 };
