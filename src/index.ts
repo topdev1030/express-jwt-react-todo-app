@@ -13,7 +13,14 @@ import { Env } from "./env";
 const setupServer = async () => {
 	await dbCreate();
 
-	await AppDataSouce.initialize();
+	await AppDataSouce.initialize()
+		.then(() => {
+			console.log("Data Source has been initialized!");
+			// Start your Express server here
+		})
+		.catch((error) => {
+			console.error("Error during Data Source initialization:", error);
+		});
 
 	const app = express();
 	const { port } = Env;

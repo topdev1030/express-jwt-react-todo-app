@@ -14,6 +14,12 @@ import {
 export const userRouter = Router();
 
 userRouter.get(
+	"/all",
+	passport.authenticate("jwt", { session: false }),
+	getAllUsers
+);
+
+userRouter.get(
 	"/current",
 	passport.authenticate("jwt", { session: false }),
 	getCurrentUser
@@ -29,12 +35,6 @@ userRouter.delete(
 	"/current/delete",
 	passport.authenticate("jwt", { session: false }),
 	deleteCurrentUser
-);
-
-userRouter.get(
-	"/all",
-	passport.authenticate("jwt", { session: false }),
-	getAllUsers
 );
 
 userRouter.get(
