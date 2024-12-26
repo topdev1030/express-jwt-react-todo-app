@@ -1,11 +1,10 @@
 import jwt from "jsonwebtoken";
 import { Env } from "../env";
-// types
-import { PayloadForToken } from "../types";
+import { options } from "../config/options";
 
-export const generateToken = (payload: PayloadForToken) => {
-	const { secretKey, expiresIn } = Env;
-	return `Bearer ${jwt.sign({ payload }, secretKey || "express", {
+export const generateToken = (payload) => {
+	const { expiresIn } = Env;
+	return `Bearer ${jwt.sign({ payload }, options.secretOrKey, {
 		expiresIn,
 	})}`;
 };

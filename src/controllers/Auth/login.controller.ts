@@ -8,8 +8,6 @@ import {
 	comparePassword,
 	errorHandlerWrapper,
 } from "../../utils";
-// types
-import { PayloadForToken } from "../../types";
 
 const loginHandler = async (req: Request, res: Response) => {
 	const { email, password } = req.body;
@@ -33,13 +31,13 @@ const loginHandler = async (req: Request, res: Response) => {
 			.status(httpStatus.BAD_REQUEST);
 
 	// if all passed, generate token
-	const payload: PayloadForToken = {
+	const payload = {
 		id: findUser.uuid,
 		email: findUser.email,
 		username: findUser.username,
 	};
 	const token = generateToken(payload);
-	res.json({ token }).status(httpStatus.ACCEPTED);
+	res.json({ success: true, token }).status(httpStatus.ACCEPTED);
 };
 
 export const loginController = errorHandlerWrapper(loginHandler);

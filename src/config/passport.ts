@@ -20,7 +20,7 @@ const configureJwtStrategy = (passport: typeof import("passport")) => {
 		new JwtStrategy(opts, async (jwtPayload: JwtPayload, done) => {
 			userRepository
 				.findOne({ where: { uuid: jwtPayload.id } })
-				.then((user) => {
+				.then((user: UserEntity) => {
 					if (user) {
 						return done(null, user);
 					}
