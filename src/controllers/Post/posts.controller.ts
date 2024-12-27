@@ -25,15 +25,59 @@ const getAllPosts = async (req: Request, res: Response) => {
 
 const getPostById = async (req: Request, res: Response) => {
 	await postRepository
-		.find()
-		.then((posts) => {
-			if (!posts) {
+		.findOne({
+			where: { uuid: req.params.post_id, user: { uuid: req.params.user_id } },
+		})
+		.then((post) => {
+			if (!post) {
 				return res
 					.status(httpStatus.NOT_FOUND)
-					.json({ error: "No posts found" });
+					.json({ error: "No post found" });
 			}
 
-			res.status(httpStatus.OK).json(posts);
+			res.status(httpStatus.OK).json(post);
+		})
+		.catch((err) => console.log(err));
+};
+
+const updatePostById = async (req: Request, res: Response) => {
+	await postRepository
+		.findOne({
+			where: { uuid: req.params.post_id, user: { uuid: req.params.user_id } },
+		})
+		.then((post) => {
+			if (!post) {
+				return res
+					.status(httpStatus.NOT_FOUND)
+					.json({ error: "No post found" });
+			}
+
+			// update post
+			const { title, content } = req.body;
+			post.title = title || post.title;
+			post.content = content || post.content;
+
+			postRepository.save(post);
+			res.status(httpStatus.OK).json(post);
+		})
+		.catch((err) => console.log(err));
+};
+
+const deletePostById = async (req: Request, res: Response) => {
+	await postRepository
+		.findOne({
+			where: { uuid: req.params.post_id, user: { uuid: req.params.user_id } },
+		})
+		.then((post) => {
+			if (!post) {
+				return res
+					.status(httpStatus.NOT_FOUND)
+					.json({ error: "No post found" });
+			}
+
+			// delete post
+			postRepository.remove(post);
+			res.status(httpStatus.OK).json({ success: true });
 		})
 		.catch((err) => console.log(err));
 };
@@ -63,4 +107,4 @@ const createPost = async (req: Request, res: Response) => {
 		.catch((err) => console.log(err));
 };
 
-export { getAllPosts, createPost };
+export { getAllPosts, createPost, getPostById, updatePostById, deletePostById };
